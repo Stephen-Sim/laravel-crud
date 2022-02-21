@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Member;
+use Facade\FlareClient\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -15,11 +16,13 @@ class MemberController extends Controller
      */
     public function index()
     {
-        $members = DB::table('members')->get();
-        // $members = Member::all();
+        // $members = DB::table('members')->paginate(5);
 
-        // dd($members);
-
+        $members = DB::table('members as m')
+            ->leftJoin('member_role as mr', 'm.role_id', '=', 'mr.id')
+            ->select('m.id', 'm.name as name', 'm.age', 'mr.name as role')
+            ->paginate(5);
+        
         return view('member.index', compact('members'));
     }
 
@@ -63,9 +66,13 @@ class MemberController extends Controller
      * @param  \App\Models\Member  $member
      * @return \Illuminate\Http\Response
      */
-    public function show(Member $member)
+    public function show($id)
     {
         //
+        // DB::table();
+        $member = Member::find($id);
+
+        return View('member.show', compact('member'));
     }
 
     /**
@@ -74,9 +81,14 @@ class MemberController extends Controller
      * @param  \App\Models\Member  $member
      * @return \Illuminate\Http\Response
      */
-    public function edit(Member $member)
+    public function edit($id)
     {
         //
+        $member = DB::table('members')
+            ->where('id', $id)
+            ->first();
+
+        return View('member.edit', compact('member'));
     }
 
     /**
@@ -86,9 +98,22 @@ class MemberController extends Controller
      * @param  \App\Models\Member  $member
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Member $member)
+    public function update(Request $request, $id)
     {
         //
+        $request->validate([
+            'name' => "required",
+            'age'  => 'required'
+        ]);
+
+        DB::table('members')
+            ->where('id', $id)
+            ->update([
+                'name'  => $request->name,
+                'age'   => $request->get('age')
+            ]);
+
+        return redirect('/member')->with('success', 'member is edited');
     }
 
     /**
@@ -97,8 +122,13 @@ class MemberController extends Controller
      * @param  \App\Models\Member  $member
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Member $member)
+    public function destroy($id)
     {
         //
+        DB::table('members')
+            ->where('id', $id)
+            ->delete();
+
+        return redirect('/member')->with('success', 'member is deleted');
     }
 }
