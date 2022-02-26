@@ -1,11 +1,67 @@
-table, th, td{
-    border: 1px solid black;
+body{
+    width: 50%;
+}
+
+h1{
+    text-align: center;
 }
 
 th, td{
     padding: 10px;
 }
 
-table{
-    margin-left: 10px;
+th{
+    text-align: center;
+    background-color: rgb(150, 182, 192);
+    color: white;
+}
+
+body{
+    margin: 20px;
+}
+
+label, input, select{
+    margin-top: 10px;
+}
+
+.error{
+    color: red;
+}
+
+.valid{
+    color:green;
+}
+
+.btn-sub{
+    background-color: rgb(62, 199, 153);
+    border: none;
+    color: white;
+    padding: 8px 10px;
+    margin: 5px 0px;
+    border-radius: 8px;
+    box-shadow: inset 0 0 0 0 #aadbec;
+    transition: box-shadow .3s ease-in-out;
+}
+
+.btn-sub:hover{
+    box-shadow: inset 100px 0 0 0 #aadbec;
+}
+
+.btn1{
+    background-color: white;
+    border: none;
+    color: red;
+}
+
+.btn1:hover{
+    text-decoration: underline;
+}
+
+.center{
+    margin: auto;
+    padding: auto;
+}
+
+.center2{
+    text-align: center;
 }

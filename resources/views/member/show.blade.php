@@ -1,13 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Member Name : {{ $member->name }}</h1>
-    <h1>Member Age : {{ $member->age }}</h1>
-</body>
-</html>
+@extends('layouts.app')
+@section('content')
+
+    <h1>View Member</h1>
+<div class="center">
+    <br>
+    <h3>Member ID : {{ $member->id }}</h3>
+    <h3>Member Name : {{ $member->name }}</h3>
+    <h3>Member Age : {{ $member->age }}</h3>
+    <h3>Member Role : {{ $member->role }}</h3>
+    <br>
+</div>
+<a href="{{route('member.index')}}"> Home </a>
+@endsection

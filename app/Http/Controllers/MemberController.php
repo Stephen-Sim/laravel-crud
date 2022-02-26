@@ -34,7 +34,8 @@ class MemberController extends Controller
     public function create()
     {
         //
-        return view('member.create');
+        $roleName = DB::table('member_role')->get();
+        return view('member.create', compact('roleName'));
     }
 
     /**
@@ -47,12 +48,16 @@ class MemberController extends Controller
     {
         $request->validate([
             'name' => "required",
-            'age'  => 'required'
+            'age'  => "required",
+            'role_id'  => "required|in:1, 2, 3"
         ]);
 
+        // $id = $request->get('role_id');       
+        // dd($id) ;
         $member = new Member([
             'name'  => $request->get('name'),
             'age'   => $request->get('age'),
+            'role_id'   => $request->get('role_id'),
         ]);
 
         $member->save();
@@ -70,8 +75,13 @@ class MemberController extends Controller
     {
         //
         // DB::table();
-        $member = Member::find($id);
-
+        $member = DB::table('members as m')
+            ->leftJoin('member_role as mr', 'm.role_id', '=', 'mr.id')
+            ->select('m.id', 'm.name as name', 'm.age', 'mr.name as role')
+            ->where('m.id', $id)
+            ->first();
+            // $member = Member::find($id);
+        
         return View('member.show', compact('member'));
     }
 
@@ -84,10 +94,12 @@ class MemberController extends Controller
     public function edit($id)
     {
         //
-        $member = DB::table('members')
-            ->where('id', $id)
+        $member = DB::table('members as m')
+            ->leftJoin('member_role as mr', 'm.role_id', '=', 'mr.id')
+            ->select('m.id', 'm.name as name', 'm.age', 'mr.name as role')
+            ->where('m.id', $id)
             ->first();
-
+  
         return View('member.edit', compact('member'));
     }
 
