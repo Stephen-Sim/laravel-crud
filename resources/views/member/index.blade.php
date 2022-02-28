@@ -6,33 +6,58 @@
         {{ $msg }}
     </div>
 @endif
-<table class="center">
-    <th>#</th>
-    <th>Member Name</th>
-    <th>Age</th>
-    <th>Member Role</th>
-    <th colspan="3">Action</th>
+<table id="memberTable" class="center">
+    <thead>
+        <th>#</th>
+        <th>Member Name</th>
+        <th>Age</th>
+        <th>Member Role</th>
+        <th>Action</th>
+    </thead>
 
-    @foreach ($members as $member)
-        <tr>
-            <td>{{ $member->id }}</td>
-            <td>{{ $member->name }}</td>
-            <td>{{ $member->age }}</td>
-            <td>{{ $member->role }}</td>
-            <td><a href="{{ route('member.edit', $member->id) }}">Edit</a></td>
-            <td><a href="{{ route('member.show', $member->id) }}">Show</a></td>
-            <td><form action="{{ route('member.destroy', $member->id) }}" method="post">
-                    @csrf
-                    @method('delete')
-                    <button class="btn1">Delete</button>
-                </form>
-            </td>
-        </tr>
-    @endforeach
 </table>
 <br>
 <div style="float: right;">
-    {{ $members->links() }}
     <a href="{{route('member.create')}}"> create member</a>
 </div>
 @endsection
+
+@section('script')
+    <script>
+        $( document ).ready(function() {
+            fetch_data();
+
+            function fetch_data(){
+                console.log("test");
+                $('#memberTable').DataTable({
+                    ajax:{
+                        url : "{{ route('member.table') }}",
+                        type: 'get',
+                        dataType : 'json'
+                    },
+                    searching : false,
+                    columns : [{
+                        data : "id",
+                        name : "id"
+                    },
+                    {
+                        data : "name",
+                        name : "name",
+                    },
+                    {
+                        data : "age",
+                        name : "age"
+                    },
+                    {
+                        data : "role",
+                        name : "role"
+                    },
+                    {
+                        data : "action",
+                        name : "action"
+                    }]
+                });
+            }
+        });
+    </script>
+@show

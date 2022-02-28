@@ -11,13 +11,13 @@
         <table class="center">
             @csrf
             @method('PUT') 
-            <tr>
+            {{-- <tr>
                 <td><label for="">Member ID </label></td>
                 <td> : </td>
                 <td><input type="text" name="id" value="{{ $member->id }}" disabled></td>
-            </tr>
+            </tr> --}}
+            <td><input hidden type="text" name="id" value="{{ $member->id }}" disabled></td>
             <br>
-
             <tr>
                 <td><label for="">Member Name </label></td>
                 <td> : </td>
@@ -35,7 +35,14 @@
             <tr>
                 <td><label for="">Member Role : </label></td>
                 <td> : </td>
-                <td><input type="text" name="role" value="{{ $member->role}}" disabled></td>
+                <td>
+                    <select name="role_id" id="role">
+                    <option selected disabled>Select Member Role</option>
+                    @foreach($roleName as $key => $value)
+                        <option value="{{ $value->id }}" {{ ( $value->id == '') ? 'selected' : '' }}> {{ $value->name }}</option>
+                    @endforeach
+                    </select>
+                </td>
             </tr>
             
         </table>

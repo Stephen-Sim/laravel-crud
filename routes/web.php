@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -13,4 +15,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::resource('/member', 'MemberController');
+Route::get('/', function(){
+    return view('welcome');
+});
+
+Route::group(['middleware' => ['auth'], 'prefix' => 'member'], function(){
+    Route::get('/list', 'MemberController@getMemberDataTable')->name('member.table');
+});
+
+
+Route::group(['middleware' => ['auth']], function(){
+    Route::resource('/member', 'MemberController');
+});
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
